@@ -87,6 +87,30 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    from util import Stack
+    q = Stack()
+    explored = []
+    path = []
+    coordinate = problem.getStartState()
+    q.push((coordinate, path)) # queue includes the coordinate + path 
+    #print("Push ", problem.getStartState())
+    
+    while q.isEmpty() is False:        
+        coordinate, path = q.pop()
+        #print("coor: ", coordinate.getStartState())
+        if coordinate not in explored:
+            explored.append(coordinate)
+            
+            if problem.isGoalState(coordinate):
+                #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
+                return path
+            
+            Successors = problem.getSuccessors(coordinate)
+            
+            for newCoordinate, move, cost in Successors:
+                q.push((newCoordinate, path + [move]))
+
+    return None
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
