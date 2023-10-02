@@ -186,6 +186,32 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    from util import PriorityQueue
+    q = PriorityQueue() # least value pop first 
+    explored = []
+    path = []
+    coordinate = problem.getStartState()
+
+    #print ("asjdhaskjdhaskdjahsd",type(coordinate))
+    q.push((coordinate, path, 0), 0) # queue includes the coordinate + path 
+    #print("Push ", problem.getStartState())
+    from searchAgents import manhattanHeuristic
+    while q.isEmpty() is False:        
+        coordinate, path, cost = q.pop()
+        #print("coor: ", coordinate.getStartState())
+        if coordinate not in explored:
+            explored.append(coordinate)
+            
+            if problem.isGoalState(coordinate):
+                #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
+                return path
+            
+            Successors = problem.getSuccessors(coordinate)
+            
+            for newCoordinate, move, cost in Successors: 
+                q.push((newCoordinate, path + [move], cost + manhattanHeuristic(newCoordinate, problem)), cost + manhattanHeuristic(newCoordinate, problem))
+
+    return None
     util.raiseNotDefined()
 
 
