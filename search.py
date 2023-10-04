@@ -88,19 +88,23 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     from util import Stack
-    q = Stack()
-    explored = []
+    s = Stack()
+    map = []
     path = []
     coordinate = problem.getStartState()
-    q.push((coordinate, path)) # queue includes the coordinate + path 
+    s.push((coordinate, path)) # queue includes the coordinate + path 
     #print("Push ", problem.getStartState())
     
-    while q.isEmpty() is False:        
-        coordinate, path = q.pop()
+    while s.isEmpty() is False:        
+        coordinate, path = s.pop()
         #print("coor: ", coordinate.getStartState())
-        if coordinate not in explored:
-            explored.append(coordinate)
+        if coordinate not in map:
+            map.append(coordinate)
             
+            # prior shorter path
+            # for tempCoor, tempPath in s:
+            #     if coordinate == s:
+
             if problem.isGoalState(coordinate):
                 #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
                 return path
@@ -108,7 +112,7 @@ def depthFirstSearch(problem):
             Successors = problem.getSuccessors(coordinate)
             
             for newCoordinate, move, cost in Successors:
-                q.push((newCoordinate, path + [move]))
+                s.push((newCoordinate, path + [move]))
 
     return None
     util.raiseNotDefined()
@@ -119,7 +123,7 @@ def breadthFirstSearch(problem):
     from util import Queue
     #print("Problem: ", problem.getStartState())
     q = Queue()
-    explored = []
+    map = []
     path = []
     coordinate = problem.getStartState()
     #print ("asjdhaskjdhaskdjahsd",type(coordinate))
@@ -129,8 +133,8 @@ def breadthFirstSearch(problem):
     while q.isEmpty() is False:        
         coordinate, path = q.pop()
         #print("coor: ", coordinate.getStartState())
-        if coordinate not in explored:
-            explored.append(coordinate)
+        if coordinate not in map:
+            map.append(coordinate)
             
             if problem.isGoalState(coordinate):
                 #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
@@ -150,7 +154,7 @@ def uniformCostSearch(problem):
     from util import PriorityQueue
     #print("Problem: ", problem.getStartState())
     q = PriorityQueue() # least value pop first 
-    explored = []
+    map = []
     path = []
     coordinate = problem.getStartState()
 
@@ -161,8 +165,8 @@ def uniformCostSearch(problem):
     while q.isEmpty() is False:        
         coordinate, path, cost = q.pop()
         #print("coor: ", coordinate.getStartState())
-        if coordinate not in explored:
-            explored.append(coordinate)
+        if coordinate not in map:
+            map.append(coordinate)
             
             if problem.isGoalState(coordinate):
                 #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
@@ -188,7 +192,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     q = PriorityQueue() # least value pop first 
-    explored = []
+    map = []
     path = []
     coordinate = problem.getStartState()
 
@@ -199,8 +203,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while q.isEmpty() is False:        
         coordinate, path, cost = q.pop()
         #print("coor: ", coordinate.getStartState())
-        if coordinate not in explored:
-            explored.append(coordinate)
+        if coordinate not in map:
+            map.append(coordinate)
             
             if problem.isGoalState(coordinate):
                 #print("FoundFoundFoundFoundFoundFoundFoundFoundFoundFound\n")
@@ -208,12 +212,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             
             Successors = problem.getSuccessors(coordinate)
             
-            for newCoordinate, move, cost in Successors: 
-                q.push((newCoordinate, path + [move], cost + manhattanHeuristic(newCoordinate, problem)), cost + manhattanHeuristic(newCoordinate, problem))
+            for newCoordinate, move, newCost in Successors: 
+                q.push((newCoordinate, path + [move], cost + newCost), cost + newCost + heuristic(newCoordinate, problem))
 
     return None
     util.raiseNotDefined()
-
 
 # Abbreviations
 bfs = breadthFirstSearch
